@@ -1,4 +1,4 @@
-// pages/api/practice-log/update.ts
+// pages/api/practice-log/create.ts
 
 import type { NextApiRequest, NextApiResponse } from "next";
 import { PrismaClient } from "@prisma/client";
@@ -9,23 +9,22 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "PUT") {
-    const { id, date, duration, notes } = req.body;
+  if (req.method === "POST") {
+    const { date, duration, notes } = req.body;
     try {
-      const updatedLog = await prisma.practiceLog.update({
-        where: { id: parseInt(id) },
+      const newLog = await prisma.practiceLog.create({
         data: {
           date: new Date(date),
           duration: parseInt(duration),
           notes: notes || "",
         },
       });
-      res.status(200).json(updatedLog);
+      res.status(200).json(newLog);
     } catch (error) {
-      res.status(500).json({ error: "Error updating practice log" });
+      res.status(500).json({ error: "Error creating practice log" });
     }
   } else {
-    res.setHeader("Allow", ["PUT"]);
+    res.setHeader("Allow", ["POST"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
