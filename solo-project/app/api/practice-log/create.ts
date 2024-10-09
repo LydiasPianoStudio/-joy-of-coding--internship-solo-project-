@@ -9,6 +9,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log("API route hit with method:", req.method); // Example log
   if (req.method === "POST") {
     const { date, duration, notes } = req.body;
     try {
