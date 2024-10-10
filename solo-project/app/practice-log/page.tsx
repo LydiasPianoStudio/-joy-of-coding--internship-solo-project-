@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter for navigation
 
 type PracticeLog = {
   id: number;
@@ -12,9 +13,10 @@ export default function PracticeLogList() {
   const [logs, setLogs] = useState<PracticeLog[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter(); // Router hook for navigation
 
+  // Fetch logs from API
   useEffect(() => {
-    // Fetch logs from API
     const fetchLogs = async () => {
       try {
         const response = await fetch("/api/practice-log");
@@ -29,9 +31,11 @@ export default function PracticeLogList() {
         setLoading(false);
       }
     };
+
     fetchLogs();
   }, []);
 
+  // Delete log function
   const handleDelete = async (id: number) => {
     try {
       const response = await fetch(`/api/practice-log?id=${id}`, {
@@ -44,6 +48,11 @@ export default function PracticeLogList() {
     } catch (error: any) {
       setError(error.message);
     }
+  };
+
+  // Redirect to the update page when the "Edit" button is clicked
+  const handleEdit = (id: number) => {
+    router.push(`/practice-log/update/${id}`);
   };
 
   if (loading) {
@@ -65,6 +74,12 @@ export default function PracticeLogList() {
               <strong>Date:</strong> {new Date(log.date).toLocaleDateString()} |{" "}
               <strong>Duration:</strong> {log.duration} minutes |{" "}
               <strong>Notes:</strong> {log.notes ?? "None"} |{" "}
+              <button
+                className="bg-yellow-500 text-white py-1 px-3 rounded"
+                onClick={() => handleEdit(log.id)} // Navigate to the update page
+              >
+                Edit
+              </button>{" "}
               <button
                 className="bg-red-500 text-white py-1 px-3 rounded"
                 onClick={() => handleDelete(log.id)}

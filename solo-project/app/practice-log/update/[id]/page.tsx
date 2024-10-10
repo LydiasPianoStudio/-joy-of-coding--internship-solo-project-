@@ -1,23 +1,37 @@
+"use client";
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 export default function UpdatePracticeLogPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const { id } = useParams(); // Get the dynamic route ID from the URL
   const [log, setLog] = useState(null);
   const [duration, setDuration] = useState("");
   const [notes, setNotes] = useState("");
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [error, setError] = useState<string | null>(null);
 
-  // Get the practice log by ID
-  const id = searchParams.get("id");
-
+  // Fetch the practice log details using the provided `id`
   useEffect(() => {
     const fetchLog = async () => {
-      const response = await fetch(`/api/practice-log/${id}`);
-      const data = await response.json();
-      setLog(data);
-      setDuration(data.duration);
-      setNotes(data.notes);
+      try {
+        const response = await fetch(`/api/practice-log/${id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch practice log");
+        }
+        const data = await response.json();
+        setLog(data);
+        setDuration(data.duration); // Set initial duration from fetched log
+        setNotes(data.notes || ""); // Set initial notes, default to empty if null
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError("An unknown error occurred");
+        }
+      } finally {
+        setLoading(false);
+      }
     };
 
     if (id) {
@@ -25,6 +39,7 @@ export default function UpdatePracticeLogPage() {
     }
   }, [id]);
 
+  // Handle updating the practice log
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -42,11 +57,21 @@ export default function UpdatePracticeLogPage() {
     });
 
     if (res.ok) {
-      router.push("/practice-log");
+      router.push("/practice-log"); // Redirect to practice log list on successful update
     } else {
       console.error("Failed to update log");
+      setError("Failed to update log"); // Show error if update fails
     }
   };
+
+  // Loading and error handling
+  if (loading) {
+    return <p>Loading practice log...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <div className="container">
@@ -60,6 +85,7 @@ export default function UpdatePracticeLogPage() {
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
               className="mt-1 block w-full"
+              required
             />
           </label>
           <label className="block mt-2">
@@ -68,6 +94,7 @@ export default function UpdatePracticeLogPage() {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               className="mt-1 block w-full"
+              required
             />
           </label>
           <button

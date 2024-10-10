@@ -1,6 +1,6 @@
 // app/api/practice-log/route.ts
 
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient(); // Initialize Prisma Client
@@ -38,18 +38,6 @@ export async function POST(request: Request) {
 }
 
 // **GET** - Retrieve all practice log entries
-// export async function GET() {
-//   try {
-//     const practiceLogs = await prisma.practiceLog.findMany();
-//     return NextResponse.json(practiceLogs);
-//   } catch (error) {
-//     return NextResponse.json(
-//       { error: "Failed to fetch practice logs" },
-//       { status: 500 }
-//     );
-//   }
-// }
-
 // Fetch all logs
 export async function GET() {
   try {
@@ -62,38 +50,62 @@ export async function GET() {
 }
 
 // **PUT** - Update a practice log entry by ID
-export async function PUT(request: Request) {
+// export async function PUT(request: Request) {
+//   try {
+//     const body = await request.json();
+//     const { id, date, duration, notes } = body;
+
+//     if (!id) {
+//       return NextResponse.json({ message: "Missing log ID" }, { status: 400 });
+//     }
+
+//     // Ensure date is valid
+//     const updatedLog = await prisma.practiceLog.update({
+//       where: { id: id },
+//       data: {
+//         date: date ? new Date(date) : undefined,
+//         duration: duration !== undefined ? duration : undefined,
+//         notes: notes !== undefined ? notes : undefined,
+//       },
+//     });
+
+//     return NextResponse.json(
+//       { message: "Practice log updated!", log: updatedLog },
+//       { status: 200 }
+//     );
+//   } catch (error) {
+//     console.error("Error updating practice log:", error);
+//     return NextResponse.json(
+//       {
+//         message: "Server error",
+//         error: error instanceof Error ? error.message : "Unknown error",
+//       },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+//
+// PUT /api/practice-log/[id]
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const id = parseInt(params.id, 10); // Get the ID from params
+  const body = await req.json();
+
   try {
-    const body = await request.json();
-    const { id, date, duration, notes } = body;
-
-    if (!id) {
-      return NextResponse.json({ message: "Missing log ID" }, { status: 400 });
-    }
-
-    // Ensure date is valid
     const updatedLog = await prisma.practiceLog.update({
       where: { id: id },
       data: {
-        date: date ? new Date(date) : undefined,
-        duration: duration !== undefined ? duration : undefined,
-        notes: notes !== undefined ? notes : undefined,
+        duration: body.duration,
+        notes: body.notes,
       },
     });
-
-    return NextResponse.json(
-      { message: "Practice log updated!", log: updatedLog },
-      { status: 200 }
-    );
+    return NextResponse.json(updatedLog, { status: 200 });
   } catch (error) {
     console.error("Error updating practice log:", error);
-    return NextResponse.json(
-      {
-        message: "Server error",
-        error: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
 
