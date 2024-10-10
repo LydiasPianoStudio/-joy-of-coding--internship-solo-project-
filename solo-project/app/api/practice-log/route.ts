@@ -33,10 +33,7 @@ export async function POST(request: Request) {
     );
   } catch (error) {
     console.error("Error creating practice log:", error);
-    return NextResponse.json(
-      { message: "Server error", error: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
 
