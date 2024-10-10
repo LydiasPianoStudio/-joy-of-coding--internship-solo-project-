@@ -13,8 +13,8 @@ export default function PracticeLogList() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch logs from the API
   useEffect(() => {
+    // Fetch logs from API
     const fetchLogs = async () => {
       try {
         const response = await fetch("/api/practice-log");
@@ -22,38 +22,33 @@ export default function PracticeLogList() {
           throw new Error("Failed to fetch practice logs");
         }
         const data = await response.json();
-        // Ensure data.logs is an array; if not, default to an empty array
-        setLogs(Array.isArray(data.logs) ? data.logs : []);
+        setLogs(data);
       } catch (error: any) {
         setError(error.message);
       } finally {
         setLoading(false);
       }
     };
-
     fetchLogs();
   }, []);
 
-  // Handle log deletion
   const handleDelete = async (id: number) => {
-    const res = await fetch(`/api/practice-log/${id}`, {
-      method: "DELETE",
-    });
-
-    if (res.ok) {
-      alert("Log deleted");
-      setLogs(logs.filter((log) => log.id !== id)); // Remove the deleted log from the list
-    } else {
-      console.error("Failed to delete log");
+    try {
+      const response = await fetch(`/api/practice-log?id=${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete practice log");
+      }
+      setLogs(logs.filter((log) => log.id !== id));
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
-  // Loading state
   if (loading) {
     return <p>Loading practice logs...</p>;
   }
-
-  // Error state
   if (error) {
     return <p>Error: {error}</p>;
   }

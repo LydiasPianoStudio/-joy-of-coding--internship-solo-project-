@@ -38,15 +38,26 @@ export async function POST(request: Request) {
 }
 
 // **GET** - Retrieve all practice log entries
+// export async function GET() {
+//   try {
+//     const practiceLogs = await prisma.practiceLog.findMany();
+//     return NextResponse.json(practiceLogs);
+//   } catch (error) {
+//     return NextResponse.json(
+//       { error: "Failed to fetch practice logs" },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+// Fetch all logs
 export async function GET() {
   try {
-    const practiceLogs = await prisma.practiceLog.findMany();
-    return NextResponse.json(practiceLogs);
+    const logs = await prisma.practiceLog.findMany(); // Fetch all logs
+    return NextResponse.json(logs, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch practice logs" },
-      { status: 500 }
-    );
+    console.error("Error retrieving practice logs:", error);
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
 
