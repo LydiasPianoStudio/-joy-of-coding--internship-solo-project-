@@ -41,14 +41,26 @@ export async function POST(request: Request) {
 }
 
 // **GET** - Retrieve all practice log entries
+// export async function GET() {
+//   try {
+//     const logs = await prisma.practiceLog.findMany();
+//     return NextResponse.json({ logs }, { status: 200 });
+//   } catch (error) {
+//     console.error("Error retrieving practice logs:", error);
+//     return NextResponse.json(
+//       { message: "Server error", error: error.message },
+//       { status: 500 }
+//     );
+//   }
+// }
+
 export async function GET() {
   try {
-    const logs = await prisma.practiceLog.findMany();
-    return NextResponse.json({ logs }, { status: 200 });
+    const practiceLogs = await prisma.practiceLog.findMany();
+    return NextResponse.json(practiceLogs);
   } catch (error) {
-    console.error("Error retrieving practice logs:", error);
     return NextResponse.json(
-      { message: "Server error", error: error.message },
+      { error: "Failed to fetch practice logs" },
       { status: 500 }
     );
   }
