@@ -1,9 +1,7 @@
 // app/api/practice-log/route.ts
 
 import { NextResponse, NextRequest } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient(); // Initialize Prisma Client
+import { prisma } from "@/lib/prisma";
 
 // **POST** - Create a new practice log entry
 export async function POST(request: Request) {
@@ -49,32 +47,49 @@ export async function GET() {
   }
 }
 
-// **PUT** - Update a practice log entry by ID
-// export async function PUT(request: Request) {
+// PUT /api/practice-log/[id]
+// export async function PUT(
+//   req: NextRequest,
+//   { params }: { params: { id: string } }
+// ) {
+//   const id = parseInt(params.id, 10); // Get the ID from params
+//   const body = await req.json();
+
 //   try {
-//     const body = await request.json();
-//     const { id, date, duration, notes } = body;
+//     const updatedLog = await prisma.practiceLog.update({
+//       where: { id: id },
+//       data: {
+//         duration: body.duration,
+//         notes: body.notes,
+//       },
+//     });
+//     return NextResponse.json(updatedLog, { status: 200 });
+//   } catch (error) {
+//     console.error("Error updating practice log:", error);
+//     return NextResponse.json({ message: "Server error" }, { status: 500 });
+//   }
+// }
+
+// **DELETE** - Delete a practice log entry by ID
+// export async function DELETE(request: Request) {
+//   try {
+//     const { searchParams } = new URL(request.url);
+//     const id = searchParams.get("id");
 
 //     if (!id) {
 //       return NextResponse.json({ message: "Missing log ID" }, { status: 400 });
 //     }
 
-//     // Ensure date is valid
-//     const updatedLog = await prisma.practiceLog.update({
-//       where: { id: id },
-//       data: {
-//         date: date ? new Date(date) : undefined,
-//         duration: duration !== undefined ? duration : undefined,
-//         notes: notes !== undefined ? notes : undefined,
-//       },
+//     const deletedLog = await prisma.practiceLog.delete({
+//       where: { id: parseInt(id) },
 //     });
 
 //     return NextResponse.json(
-//       { message: "Practice log updated!", log: updatedLog },
+//       { message: "Practice log deleted!", log: deletedLog },
 //       { status: 200 }
 //     );
 //   } catch (error) {
-//     console.error("Error updating practice log:", error);
+//     console.error("Error deleting practice log:", error);
 //     return NextResponse.json(
 //       {
 //         message: "Server error",
@@ -84,57 +99,3 @@ export async function GET() {
 //     );
 //   }
 // }
-
-//
-// PUT /api/practice-log/[id]
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const id = parseInt(params.id, 10); // Get the ID from params
-  const body = await req.json();
-
-  try {
-    const updatedLog = await prisma.practiceLog.update({
-      where: { id: id },
-      data: {
-        duration: body.duration,
-        notes: body.notes,
-      },
-    });
-    return NextResponse.json(updatedLog, { status: 200 });
-  } catch (error) {
-    console.error("Error updating practice log:", error);
-    return NextResponse.json({ message: "Server error" }, { status: 500 });
-  }
-}
-
-// **DELETE** - Delete a practice log entry by ID
-export async function DELETE(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const id = searchParams.get("id");
-
-    if (!id) {
-      return NextResponse.json({ message: "Missing log ID" }, { status: 400 });
-    }
-
-    const deletedLog = await prisma.practiceLog.delete({
-      where: { id: parseInt(id) },
-    });
-
-    return NextResponse.json(
-      { message: "Practice log deleted!", log: deletedLog },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error deleting practice log:", error);
-    return NextResponse.json(
-      {
-        message: "Server error",
-        error: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
-    );
-  }
-}

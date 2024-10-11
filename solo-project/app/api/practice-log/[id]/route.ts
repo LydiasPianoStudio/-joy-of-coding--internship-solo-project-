@@ -1,7 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient(); // Initialize Prisma Client
+import { prisma } from "@/lib/prisma";
 
 // GET a specific practice log by ID
 export async function GET() {
