@@ -16,24 +16,23 @@ export async function GET() {
 
 // PUT (update) a specific practice log by ID
 export async function PUT(
-  req: NextRequest,
+  req: Request,
   { params }: { params: { id: string } }
 ) {
-  const id = parseInt(params.id, 10); // Get the ID from params
-  const body = await req.json();
+  const { id } = params;
+  const { duration, notes } = await req.json(); // Parse request body
 
   try {
+    // Ensure the ID is a number
     const updatedLog = await prisma.practiceLog.update({
-      where: { id: id },
-      data: {
-        duration: body.duration,
-        notes: body.notes,
-      },
+      where: { id: Number(id) },
+      data: { duration: parseInt(duration), notes },
     });
-    return NextResponse.json(updatedLog, { status: 200 });
+
+    return new Response(JSON.stringify(updatedLog), { status: 200 });
   } catch (error) {
     console.error("Error updating practice log:", error);
-    return NextResponse.json({ message: "Server error" }, { status: 500 });
+    return new Response("Failed to update log", { status: 500 });
   }
 }
 
