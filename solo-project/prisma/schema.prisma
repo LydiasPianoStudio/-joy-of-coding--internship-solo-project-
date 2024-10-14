@@ -17,7 +17,7 @@ model PracticeLog {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
+  id            String   @id @default(uuid())
   name          String?
   email         String   @unique
   emailVerified DateTime?
@@ -28,7 +28,7 @@ model User {
 
 model Account {
   id                 Int       @id @default(autoincrement())
-  userId             Int
+  userId             String
   user               User      @relation(fields: [userId], references: [id])
   provider           String
   providerAccountId  String
@@ -38,7 +38,7 @@ model Account {
 model Session {
   id           Int      @id @default(autoincrement())
   sessionToken String   @unique
-  userId       Int
+  userId       String
   user         User     @relation(fields: [userId], references: [id])
   expires      DateTime
 }

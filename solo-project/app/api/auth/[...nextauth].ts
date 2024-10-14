@@ -1,19 +1,8 @@
-import NextAuth, { Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string;
-      name?: string | null;
-      email?: string | null;
-      image?: string | null;
-    };
-  }
-}
+import NextAuth from "next-auth";
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -29,24 +18,23 @@ export default NextAuth({
           return null;
         }
 
-        // Find the user by email
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
 
-        // If user is found and password matches, return the user
         if (user && bcrypt.compareSync(credentials.password, user.password)) {
+          // Convert the id to a string
           return {
             ...user,
-            id: user.id.toString(), // Ensure id is a string
+            id: user.id.toString(),
           };
         }
 
-        // If authentication fails, return null
         return null;
       },
     }),
   ],
+  
   session: { strategy: "jwt" },
   pages: {
     signIn: "/auth/signin",
@@ -54,7 +42,7 @@ export default NextAuth({
   callbacks: {
     async session({ session, token, user }) {
       if (session?.user) {
-        session.user.id = token.id as string;
+        session.user.id = token.id;
       }
       return session;
     },
