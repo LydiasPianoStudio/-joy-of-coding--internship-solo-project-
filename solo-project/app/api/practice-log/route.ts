@@ -16,6 +16,8 @@ export async function POST(request: Request) {
       );
     }
 
+  
+
     // Ensure date is in the correct format (DateTime in Prisma)
     const newLog = await prisma.practiceLog.create({
       data: {

@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,17 +21,14 @@ export default function Signup() {
       });
 
       if (response.status === 201) {
-        // Display success message
-        setSuccess(true);
-        setError("");
+        // Redirect to the sign-in page after successful signup
+        router.push("/auth/signin");
       } else {
         const data = await response.json();
         setError(data.error || "Signup failed. Please try again.");
-        setSuccess(false);
       }
     } catch (error) {
       setError("Signup failed. Please try again.");
-      setSuccess(false);
     }
   };
 
@@ -57,11 +55,6 @@ export default function Signup() {
           />
         </div>
         {error && <p>{error}</p>}
-        {success && (
-          <p>
-            Signup successful! You can now <a href="/auth/signin">sign in</a>.
-          </p>
-        )}
         <button type="submit">Signup</button>
       </form>
     </div>

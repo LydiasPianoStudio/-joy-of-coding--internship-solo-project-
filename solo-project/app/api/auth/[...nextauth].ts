@@ -1,8 +1,8 @@
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import NextAuth from "next-auth";
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -23,10 +23,9 @@ export default NextAuth({
         });
 
         if (user && bcrypt.compareSync(credentials.password, user.password)) {
-          // Convert the id to a string
           return {
             ...user,
-            id: user.id.toString(),
+            id: user.id.toString(), // Ensure id is a string
           };
         }
 
@@ -34,13 +33,12 @@ export default NextAuth({
       },
     }),
   ],
-  
   session: { strategy: "jwt" },
   pages: {
     signIn: "/auth/signin",
   },
   callbacks: {
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       if (session?.user) {
         session.user.id = token.id;
       }
@@ -53,4 +51,5 @@ export default NextAuth({
       return token;
     },
   },
+  secret: process.env.NEXTAUTH_SECRET,
 });
