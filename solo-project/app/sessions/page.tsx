@@ -20,9 +20,13 @@ const SessionsPage = () => {
     const fetchSessions = async () => {
       try {
         const response = await axios.get("/api/auth/session");
-        setSessions(response.data);
+        setSessions(response.data as Session[]);
       } catch (err) {
-        setError(err.message);
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }

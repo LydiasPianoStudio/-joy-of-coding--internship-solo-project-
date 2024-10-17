@@ -21,7 +21,7 @@ export default function SignInForm() {
     if (result?.error) {
       setError(result.error);
     } else {
-      router.push("/profile");
+      router.push("/practice");
     }
   };
 

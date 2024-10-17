@@ -17,3 +17,14 @@ export default function RootLayout({
     </html>
   );
 }
+
+// const { data: session } = useSession();
+
+//   return (
+//     <html lang="en">
+//       <body>
+//         <SessionProvider session={session}>{children}</SessionProvider>
+//       </body>
+//     </html>
+//   );
+// }

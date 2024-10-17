@@ -6,10 +6,11 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
+  const numericId = parseInt(id, 10);
 
   try {
     const practiceLog = await prisma.practiceLog.findUnique({
-      where: { id },
+      where: { id: numericId },
     });
 
     if (!practiceLog) {

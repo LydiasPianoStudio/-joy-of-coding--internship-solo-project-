@@ -23,8 +23,12 @@ export default function Profile() {
       <h1>Profile</h1>
       {session ? (
         <div>
-          <p>Signed in as {session.user.email}</p>
-          <p>Name: {session.user.name}</p>
+          {session.user && (
+            <>
+              <p>Signed in as {session.user.email}</p>
+              <p>Name: {session.user.name}</p>
+            </>
+          )}
           {/* Add more profile details here */}
         </div>
       ) : (

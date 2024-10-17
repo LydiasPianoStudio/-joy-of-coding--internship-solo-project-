@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import { useRouter } from "next/navigation";
+import { Button } from "@radix-ui/themes";
 
 type PracticeLog = {
   id: number;
@@ -13,7 +14,10 @@ export default function PracticeLogList() {
   const [logs, setLogs] = useState<PracticeLog[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter(); // Router hook for navigation
+  const [sortKey, setSortKey] = useState<string>("date"); // Sorting key
+  const [filterDate, setFilterDate] = useState<string>(""); // Filter by date
+  const [minDuration, setMinDuration] = useState<number | null>(null); // Filter by min duration
+  const router = useRouter();
 
   // Fetch logs from API
   useEffect(() => {
@@ -50,10 +54,27 @@ export default function PracticeLogList() {
     }
   };
 
-  // Redirect to the update page when the "Edit" button is clicked
+  // Redirect to the update page
   const handleEdit = (id: number) => {
     router.push(`/practice-log/update/${id}`);
   };
+
+  // Sort logs based on selected key
+  const sortedLogs = logs.sort((a, b) => {
+    if (sortKey === "date") {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    } else if (sortKey === "duration") {
+      return a.duration - b.duration;
+    }
+    return 0;
+  });
+
+  // Filter logs based on selected criteria
+  const filteredLogs = sortedLogs.filter((log) => {
+    const matchesDate = filterDate ? log.date.startsWith(filterDate) : true;
+    const matchesDuration = minDuration ? log.duration >= minDuration : true;
+    return matchesDate && matchesDuration;
+  });
 
   if (loading) {
     return <p>Loading practice logs...</p>;
@@ -63,29 +84,74 @@ export default function PracticeLogList() {
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Practice Logs</h1>
-      {logs && logs.length === 0 ? (
+    <div className="container mx-auto p-6 rounded bg-purple-400 ">
+      <h1 className="text-4xl font-bold text-center mb-6 pt-4 text-purple-700">
+        Practice Logs
+      </h1>
+
+      {/* Sorting Options */}
+      <div className="text-center mb-6 pt-4 ">
+        <label className="mr-2 text-lg font-medium py-1 px-3 text-white">
+          Sort by:
+        </label>
+        <select
+          value={sortKey}
+          onChange={(e) => setSortKey(e.target.value)}
+          className="border p-2"
+        >
+          <option value="date">Date</option>
+          <option value="duration">Duration</option>
+        </select>
+      </div>
+
+      {/* Filtering Options */}
+      <div className="text-center mb-6 pt-4">
+        <label className="mr-2 text-lg font-medium py-1 px-3 text-white">
+          Filter by date:
+        </label>
+        <input
+          type="date"
+          value={filterDate}
+          onChange={(e) => setFilterDate(e.target.value)}
+          className="border p-2"
+        />
+
+        <label className="text-center mb-6 pt-4 text-lg font-medium py-1 px-3 text-white">
+          Minimum duration (minutes):
+        </label>
+        <input
+          type="number"
+          value={minDuration ?? ""}
+          onChange={(e) => setMinDuration(Number(e.target.value) || null)}
+          className="border p-2"
+        />
+      </div>
+
+      {/* Logs List */}
+      {filteredLogs.length === 0 ? (
         <p className="text-gray-500">No logs found.</p>
       ) : (
         <ul className="space-y-4">
-          {logs?.map((log) => (
+          {filteredLogs.map((log) => (
             <li key={log.id} className="p-4 bg-white shadow rounded-lg">
-              <strong>Date:</strong> {new Date(log.date).toLocaleDateString()} |{" "}
-              <strong>Duration:</strong> {log.duration} minutes |{" "}
-              <strong>Notes:</strong> {log.notes ?? "None"} |{" "}
-              <button
-                className="bg-yellow-500 text-white py-1 px-3 rounded"
-                onClick={() => handleEdit(log.id)} // Navigate to the update page
+              <strong className="font-bold text-md">Date:</strong>{" "}
+              {new Date(log.date).toLocaleDateString()} |{" "}
+              <strong className="font-bold text-md">Duration:</strong>{" "}
+              {log.duration} minutes |{" "}
+              <strong className="font-bold text-md">Notes:</strong>{" "}
+              {log.notes ?? "None"} |{" "}
+              <Button
+                className="bg-fuchsia-700 text-white py-1 px-3 rounded hover:bg-fuchsia-900 text-lg mr-2"
+                onClick={() => handleEdit(log.id)}
               >
                 Edit
-              </button>{" "}
-              <button
-                className="bg-red-500 text-white py-1 px-3 rounded"
+              </Button>
+              <Button
+                className="bg-rose-700 text-white py-1 px-3 rounded hover:bg-rose-900 text-lg"
                 onClick={() => handleDelete(log.id)}
               >
                 Delete
-              </button>
+              </Button>
             </li>
           ))}
         </ul>

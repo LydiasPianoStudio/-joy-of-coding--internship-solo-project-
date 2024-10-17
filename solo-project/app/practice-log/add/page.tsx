@@ -1,7 +1,8 @@
-"use client"; // Necessary to use state and event handlers
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@radix-ui/themes";
 
 export default function AddPracticeLog() {
   const [date, setDate] = useState("");
@@ -44,13 +45,18 @@ export default function AddPracticeLog() {
 
   return (
     <div className="max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Add Practice Log</h1>
+      <h1 className="text-4xl font-bold text-center mb-6 pt-4 text-purple-700">
+        Add Practice Log
+      </h1>
       {error && <p className="text-red-500">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
+      <form
+        onSubmit={handleSubmit}
+        className="rounded bg-purple-400 p-8 max-w-lg mx-auto"
+      >
+        <div className="mb-6">
           <label
             htmlFor="date"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-white"
           >
             Date
           </label>
@@ -59,15 +65,15 @@ export default function AddPracticeLog() {
             id="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="mt-1 p-2 w-full border rounded-md"
+            className="mt-2 p-3 w-full border rounded-md text-gray-700 text-lg"
             required
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-6">
           <label
             htmlFor="duration"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-white"
           >
             Duration (minutes)
           </label>
@@ -76,15 +82,15 @@ export default function AddPracticeLog() {
             id="duration"
             value={duration}
             onChange={(e) => setDuration(e.target.value)}
-            className="mt-1 p-2 w-full border rounded-md"
+            className="mt-2 p-3 w-full border rounded-md text-gray-700 text-lg"
             required
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-6">
           <label
             htmlFor="notes"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-lg font-medium text-white"
           >
             Notes (optional)
           </label>
@@ -92,17 +98,18 @@ export default function AddPracticeLog() {
             id="notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="mt-1 p-2 w-full border rounded-md"
+            className="mt-2 p-3 w-full border rounded-md text-gray-700 text-lg"
             rows={4}
           />
         </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
-        >
-          Add Practice Log
-        </button>
+        <div className="text-center mt-8">
+          <Button
+            className=" bg-purple-700 text-white py-3 px-6 rounded hover:bg-purple-900 text-lg"
+            type="submit"
+          >
+            Add Practice Log
+          </Button>
+        </div>
       </form>
     </div>
   );

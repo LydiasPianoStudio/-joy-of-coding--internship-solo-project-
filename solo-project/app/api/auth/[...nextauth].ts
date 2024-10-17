@@ -15,6 +15,7 @@ export default NextAuth({
       },
       authorize: async (credentials) => {
         if (!credentials) {
+          console.error("No credentials provided");
           return null;
         }
 
@@ -29,6 +30,7 @@ export default NextAuth({
           };
         }
 
+        console.error("Invalid credentials");
         return null;
       },
     }),
@@ -36,19 +38,25 @@ export default NextAuth({
   session: { strategy: "jwt" },
   pages: {
     signIn: "/auth/signin",
+    error: "/auth/error", // Custom error page
   },
   callbacks: {
-    async session({ session, token }) {
-      if (session?.user) {
-        session.user.id = token.id;
-      }
-      return session;
-    },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account, profile }) {
       if (user) {
         token.id = user.id;
       }
+      if (account) {
+        token.accessToken = account.access_token;
+        token.id = profile.id; //unable to get user.id from profile next-auth
+      }
       return token;
+    },
+    async session({ session, token }) {
+      if (session?.user) {
+        session.user.id = token.id;
+        session.accessToken = token.accessToken; //unable to get next-auth to work with account
+      }
+      return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
