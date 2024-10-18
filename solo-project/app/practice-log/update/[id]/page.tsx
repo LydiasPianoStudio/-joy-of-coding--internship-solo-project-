@@ -75,35 +75,56 @@ export default function UpdatePracticeLogPage() {
   }
 
   return (
-    <div className="container">
-      <h1 className="text-2xl font-bold">Update Practice Log</h1>
+    <div className="max-w-md mx-auto">
+      <h1 className="text-4xl font-bold text-center mb-6 pt-4 text-purple-700">
+        Update Practice Log
+      </h1>
       {log ? (
-        <form onSubmit={handleUpdate}>
-          <label className="block mt-2">
-            <span className="text-gray-700">Duration (minutes)</span>
+        <form
+          onSubmit={handleUpdate}
+          className="rounded bg-purple-400 p-8 max-w-lg mx-auto"
+        >
+          <div className="mb-6">
+            <label
+              htmlFor="duration"
+              className="block text-lg font-medium text-white"
+            >
+              Duration (minutes)
+            </label>
             <input
               type="number"
+              id="duration"
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              className="mt-1 block w-full"
+              className="mt-2 p-3 w-full border rounded-md text-gray-700 text-lg"
               required
             />
-          </label>
-          <label className="block mt-2">
-            <span className="text-gray-700">Notes</span>
+          </div>
+
+          <div className="mb-6">
+            <label
+              htmlFor="notes"
+              className="block text-lg font-medium text-white"
+            >
+              Notes
+            </label>
             <textarea
+              id="notes"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="mt-1 block w-full"
+              className="mt-2 p-3 w-full border rounded-md text-gray-700 text-lg"
+              rows={4}
               required
             />
-          </label>
-          <Button
-            type="submit"
-            className="bg-fuchsia-700 text-white py-1 px-3 rounded hover:bg-fuchsia-900 text-lg mr-2"
-          >
-            Update Log
-          </Button>
+          </div>
+          <div className="text-center mt-8">
+            <Button
+              className="bg-purple-700 text-white py-3 px-6 rounded hover:bg-purple-900 text-lg"
+              type="submit"
+            >
+              Update Practice Log
+            </Button>
+          </div>
         </form>
       ) : (
         <p>Loading...</p>
