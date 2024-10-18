@@ -77,7 +77,7 @@ my-nextjs-project/
 
 ## Code Snippets
 
-![Practice Log](public/PracticeLog.png)
+![Practice Log](solo-project/public/PracticeLog.png)
 
 ### Adding a Practice Log
 
@@ -183,7 +183,7 @@ export default function AddPracticeLog() {
 
 ### Updating a Practice Log
 
-![Practice Log Edit](public/PracticeLogEdit.png)
+![Practice Log Edit](solo-project/public/PracticeLogEdit.png)
 
 ```javascript
 //
@@ -325,7 +325,7 @@ export default function UpdatePracticeLogPage() {
 
 ### Form Submission
 
-![Practice Log Add](public/PracticeLogAdd.png)
+![Practice Log Add](solo-project/public/PracticeLogAdd.png)
 
 ```javascript
 // form submission code snippet
