@@ -1,6 +1,6 @@
 # LydiasPianoStudio Practice Log Application
 
-![Practice Log Page](public/PracticeLogPage.png)
+![Practice Log Page](solo-project/public/PracticeLogPage.png)
 
 ## Overview
 
