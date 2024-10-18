@@ -1,4 +1,5 @@
 "use client";
+///restyle page if get the next-auth to fix
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";

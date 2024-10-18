@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { Button } from "@radix-ui/themes";
 
 export default function UpdatePracticeLogPage() {
   const router = useRouter();
@@ -97,12 +98,12 @@ export default function UpdatePracticeLogPage() {
               required
             />
           </label>
-          <button
+          <Button
             type="submit"
-            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded"
+            className="bg-fuchsia-700 text-white py-1 px-3 rounded hover:bg-fuchsia-900 text-lg mr-2"
           >
             Update Log
-          </button>
+          </Button>
         </form>
       ) : (
         <p>Loading...</p>
