@@ -1,5 +1,7 @@
 # LydiasPianoStudio Practice Log Application
 
+![Practice Log Page](public/PracticeLogPage.png)
+
 ## Overview
 
 The LydiasPianoStudio Practice Log Application is designed to help students of LydiasPianoStudio keep track of their piano practice sessions. This application allows users to log their practice times, track their progress, and achieve their musical goals with ease.
@@ -25,7 +27,7 @@ The LydiasPianoStudio Practice Log Application is designed to help students of L
 
 ## Project Structure
 
-````plaintext
+```plaintext
 my-nextjs-project/
 ├── app/
 │   ├── page.tsx
@@ -46,32 +48,37 @@ my-nextjs-project/
 ├── next.config.js
 ├── package.json
 ├── tsconfig.json
-└── [README.md](http://_vscodecontentref_/#%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22d%3A%5C%5C-joy-of-coding--internship-solo-project-%5C%5Csolo-project%5C%5CREADME.md%22%2C%22_sep%22%3A1%2C%22external%22%3A%22file%3A%2F%2F%2Fd%253A%2F-joy-of-coding--internship-solo-project-%2Fsolo-project%2FREADME.md%22%2C%22path%22%3A%22%2Fd%3A%2F-joy-of-coding--internship-solo-project-%2Fsolo-project%2FREADME.md%22%2C%22scheme%22%3A%22file%22%7D%7D)
-
+└── [README.md]
+```
 
 ## Key Features
 
 ### Practice Log Management
+
 - **Add Practice Log**: Users can add new practice logs with details such as date, duration, and notes.
 - **Update Practice Log**: Users can update existing practice logs.
 - **Delete Practice Log**: Users can delete practice logs.
 - **View Practice Logs**: Users can view a list of all practice logs, sorted and filtered by date and duration.
 
 ### User Interface
+
 - **Responsive Design**: The application is designed to be responsive and user-friendly across various devices.
 - **Tailwind CSS**: Utilized for rapid and efficient styling.
 - **Radix UI**: Used for accessible and high-quality UI components.
 
 ### API Integration
+
 - **Prisma ORM**: Used for database interactions, ensuring type safety and ease of use.
 - **RESTful API**: Implemented using Next.js API routes for CRUD operations on practice logs.
 
 ### Future Enhancements
+
 - **Authentication**: Authentication will be implemented using NextAuth.js to provide secure user login and registration functionalities.
 
 ## Code Snippets
 
 ### Adding a Practice Log
+
 ```javascript
 //
 "use client";
@@ -114,7 +121,10 @@ export default function AddPracticeLog() {
       {error && <p className="text-red-500">{error}</p>}
       <form onSubmit={handleSubmit} className="rounded bg-purple-400 p-4">
         <div className="mb-4">
-          <label htmlFor="date" className="block text-sm font-medium text-white">
+          <label
+            htmlFor="date"
+            className="block text-sm font-medium text-white"
+          >
             Date
           </label>
           <input
@@ -127,7 +137,10 @@ export default function AddPracticeLog() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="duration" className="block text-sm font-medium text-white">
+          <label
+            htmlFor="duration"
+            className="block text-sm font-medium text-white"
+          >
             Duration (minutes)
           </label>
           <input
@@ -140,7 +153,10 @@ export default function AddPracticeLog() {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="notes" className="block text-sm font-medium text-white">
+          <label
+            htmlFor="notes"
+            className="block text-sm font-medium text-white"
+          >
             Notes (optional)
           </label>
           <textarea
@@ -151,14 +167,17 @@ export default function AddPracticeLog() {
             rows={4}
           />
         </div>
-        <Button className="bg-purple-700 text-white py-2 px-4 rounded hover:bg-purple-900" type="submit">
+        <Button
+          className="bg-purple-700 text-white py-2 px-4 rounded hover:bg-purple-900"
+          type="submit"
+        >
           Add Practice Log
         </Button>
       </form>
     </div>
   );
 }
-````
+```
 
 ### Updating a Practice Log
 
