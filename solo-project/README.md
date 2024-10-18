@@ -77,8 +77,6 @@ my-nextjs-project/
 
 ## Code Snippets
 
-## Code Snippets
-
 ![Practice Log](public/PracticeLog.png)
 
 ### Adding a Practice Log
