@@ -14,6 +14,7 @@ export default function PracticeLogList() {
   const [logs, setLogs] = useState<PracticeLog[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<string>("date"); // Sorting key
   const [filterDate, setFilterDate] = useState<string>(""); // Filter by date
   const [minDuration, setMinDuration] = useState<number | null>(null); // Filter by min duration
@@ -49,6 +50,8 @@ export default function PracticeLogList() {
         throw new Error("Failed to delete practice log");
       }
       setLogs(logs.filter((log) => log.id !== id));
+      setSuccessMessage("Successfully deleted");
+      setTimeout(() => setSuccessMessage(null), 3000); // Clear message after 3 seconds
     } catch (error: any) {
       setError(error.message);
     }
@@ -84,13 +87,20 @@ export default function PracticeLogList() {
   }
 
   return (
-    <div className="container mx-auto p-6 rounded bg-purple-400 ">
+    <div className="container mx-auto p-6 rounded bg-purple-400">
       <h1 className="text-4xl font-bold text-center mb-6 pt-4 text-purple-700">
         Practice Logs
       </h1>
 
+      {/* Success Message */}
+      {successMessage && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6">
+          {successMessage}
+        </div>
+      )}
+
       {/* Sorting Options */}
-      <div className="text-center mb-6 pt-4 ">
+      <div className="text-center mb-6 pt-4">
         <label className="mr-2 text-lg font-medium py-1 px-3 text-white">
           Sort by:
         </label>

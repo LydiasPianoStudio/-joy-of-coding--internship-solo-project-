@@ -11,6 +11,7 @@ export default function UpdatePracticeLogPage() {
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   // Fetch the practice log details using the provided `id`
   useEffect(() => {
@@ -58,7 +59,11 @@ export default function UpdatePracticeLogPage() {
     });
 
     if (res.ok) {
-      router.push("/practice-log"); // Redirect to practice log list on successful update
+      setSuccessMessage("Successfully edited");
+      setTimeout(() => {
+        setSuccessMessage(null);
+        router.push("/practice-log"); // Redirect to practice log list on successful update
+      }, 3000); // Display message for 3 seconds before redirecting
     } else {
       console.error("Failed to update log");
       setError("Failed to update log"); // Show error if update fails
@@ -79,6 +84,11 @@ export default function UpdatePracticeLogPage() {
       <h1 className="text-4xl font-bold text-center mb-6 pt-4 text-purple-700">
         Update Practice Log
       </h1>
+      {successMessage && (
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6">
+          {successMessage}
+        </div>
+      )}
       {log ? (
         <form
           onSubmit={handleUpdate}
